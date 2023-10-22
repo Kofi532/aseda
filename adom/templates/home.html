@@ -150,7 +150,7 @@
 </html> -->
 
 
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Horizontal Arrangement</title>
@@ -233,3 +233,98 @@
     </script>
 </body>
 </html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Horizontal Arrangement</title>
+    <style>
+        .table {
+            display: table;
+            border-collapse: collapse;
+        }
+        .row {
+            display: table-row;
+        }
+        .cell {
+            display: table-cell;
+            border: 1px solid #000;
+            padding: 5px;
+            cursor: pointer; /* Add cursor style for clickable cells */
+        }
+        .highlight-yellow {
+            background-color: yellow;
+        }
+        .highlight-green {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="table" id="container"></div>
+    <script>
+        const c = {{chords|safe}};
+        const container = document.getElementById('container');
+        let selectedCells = [];
+
+        // Create the table
+        c.forEach((rowData, rowIndex) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row');
+
+            rowData.forEach((cellData, cellIndex) => {
+                const cellDiv = document.createElement('div');
+                cellDiv.classList.add('cell');
+                cellDiv.textContent = cellData;
+
+                // Add a click event listener to the cell
+                cellDiv.addEventListener('click', () => {
+                    const clickedValue = c[rowIndex][cellIndex];
+                    if (selectedCells.length < 2) {
+                        // Highlight the clicked cell with different colors for the first and second selection
+                        const highlightClass = selectedCells.length === 0 ? 'highlight-yellow' : 'highlight-green';
+                        cellDiv.classList.add(highlightClass);
+                        selectedCells.push({ value: clickedValue, color: highlightClass });
+                        if (selectedCells.length === 2) {
+                            sendValuesToBackend(selectedCells);
+                        }
+                    }
+                });
+
+                rowDiv.appendChild(cellDiv);
+            });
+
+            container.appendChild(rowDiv);
+        });
+
+        const csrftoken = getCookie('csrftoken');
+
+        function sendValuesToBackend(values) {
+            fetch('/', {
+                method: 'POST',
+                body: JSON.stringify({ values: values }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken // Include the CSRF token
+                }
+            });
+        }
+
+        // Function to retrieve the CSRF token from cookies
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

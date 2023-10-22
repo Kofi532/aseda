@@ -294,18 +294,50 @@ def music_view(request):
     # total_duration = music_stream.duration.quarterLength
     music_stream.show('midi')
     ##
+    in_midi = []
     if request.method == 'POST':
         try:
-            # Get the JSON data from the POST request
-            data = json.loads(request.body)
-            print(data)
-            # lol
+            data = json.loads(request.body.decode('utf-8'))
+            values = data.get('values')
 
-            # Process the data as needed
-            # You can access the selected sublist as data
+            if len(values) == 2:
+                
+
+                # Extract the selected values and their colors
+                value1 = values[0]['value']
+                color1 = values[0]['color']
+                value2 = values[1]['value']
+                color2 = values[1]['color']
+                print(value1)
+                print(value2)
+                chords = chords[value1:value2]
+                durations = durations[value1:value2]
+                music_stream = stream.Stream()
+                # music_stream.append(tempo.MetronomeMark(number=500))
+                # Iterate through the chords and durations
+                for i, chord_notes in enumerate(chords):
+                    if i < len(durations):
+                        chord_obj = chord.Chord(chord_notes)
+                        chord_obj.duration.type = (durations[i])[0]
+                        music_stream.append(chord_obj)
+                    else:
+                        pass
+                        # print(f"Warning: Not enough durations provided for chord {i + 1}. Skipping.")
+                # total_duration = music_stream.duration.quarterLength
+                music_stream.show('midi')
+                # Handle the selected objects based on their colors
+                if color1 == 'highlight-yellow':
+                    pass
+                    # Handle the first selected object with a yellow highlight
+                    # Your logic here...
+
+                if color2 == 'highlight-green':
+                    pass
+                    # Handle the second selected object with a green highlight
+                    # Your logic here...
 
             # For demonstration purposes, simply return the processed data
-            return JsonResponse({'message': 'Data received and processed successfully'})
+                return JsonResponse({'message': 'Data received and processed successfully'})
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
         # return render(request, 'home.html', {'timer':timer, 'chords':chords})

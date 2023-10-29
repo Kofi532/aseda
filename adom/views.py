@@ -292,11 +292,17 @@ def music_view(request):
             pass
             # print(f"Warning: Not enough durations provided for chord {i + 1}. Skipping.")
     # total_duration = music_stream.duration.quarterLength
-    music_stream.show('midi')
+    # music_stream.show('midi')
     ##
     in_midi = []
     if request.method == 'POST':
+
         try:
+            # action = data.get('action')
+            action = request.POST.get('action')
+
+            if action == None:
+                music_stream.show('midi')
             data = json.loads(request.body.decode('utf-8'))
             values = data.get('values')
 
@@ -310,8 +316,12 @@ def music_view(request):
                 color2 = values[1]['color']
                 print(value1)
                 print(value2)
-                chords = chords[value1:value2]
-                durations = durations[value1:value2]
+                if value1 > value2:
+                    chords = chords[value2:value1]
+                    durations = durations[value2:value1]   
+                else:
+                    chords = chords[value1:value2]
+                    durations = durations[value1:value2]
                 music_stream = stream.Stream()
                 # music_stream.append(tempo.MetronomeMark(number=500))
                 # Iterate through the chords and durations

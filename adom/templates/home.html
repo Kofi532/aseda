@@ -261,6 +261,10 @@
     </style>
 </head>
 <body>
+    <div>
+        <button id="clearButton">Clear Highlights</button>
+        <button id="playSoundButton">Play full score</button>
+    </div>
     <div class="table" id="container"></div>
     <script>
         const c = {{chords|safe}};
@@ -325,6 +329,46 @@
             }
             return cookieValue;
         }
+
+        // Select the clear button
+        const clearButton = document.getElementById('clearButton');
+
+        // Add a click event listener to the clear button
+        clearButton.addEventListener('click', () => {
+            // Reset selectedCells array
+            selectedCells.forEach(cell => {
+                const cellElements = document.querySelectorAll(`.${cell.color}`);
+                cellElements.forEach(element => {
+                    element.classList.remove(cell.color);
+                });
+            });
+            selectedCells = [];
+        });
+        //play sound button
+        document.getElementById("playSoundButton").addEventListener("click", function() {
+    // When the button is clicked, send a request to the Django backend
+    fetch('/trigger-action/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ action: 'play_sound' })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Request sent to play sound');
+        } else {
+            console.error('Failed to trigger action');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+
     </script>
 </body>
 </html>

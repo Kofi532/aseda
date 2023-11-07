@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Numbers Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-table {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* 10 columns for the table */
+            gap: 5px;
+        }
+        .btn-table .btn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="btn-table">
+            <!-- Generating a table of clickable buttons for numbers 1 to 1000 -->
+            {% for i in " "|rjust:1000 %}
+                {% with forloop.counter as num %}
+                    <a href="base.html" class="btn btn-primary" id="btn-{{ num }}">{{ num }}</a>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Add click event listeners to the buttons
+        document.addEventListener("DOMContentLoaded", function() {
+            var buttons = document.querySelectorAll('.btn');
+            buttons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    // Handle the button click event here
+                    // You can use JavaScript to perform actions on button click
+                    // For this example, I'll simply navigate to base.html
+                    window.location.href = 'base.html';
+                });
+            });
+        });
+    </script> 
+
+
+
+</body>
+</html>
+
+

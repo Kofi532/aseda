@@ -1,245 +1,18 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Horizontal Arrangement</title>
-    <style>
-        .table {
-            display: table;
-            border-collapse: collapse;
-        }
-        .row {
-            display: table-row;
-        }
-        .cell {
-            display: table-cell;
-            border: 1px solid #000;
-            padding: 5px;
-        }
-        .highlight {
-            background-color: yellow;
-        }
-    </style>
-</head>
-<body>
-    <div class="table" id="container"></div>
-
-    <script>
-        const c = {{chords|safe}};
-        const container = document.getElementById('container');
-        const highlightTimes = {{timer|safe}}; // Highlight durations in seconds
-
-        // Function to highlight a row and move to the next
-        function highlightAndMoveToNextRow(row) {
-            const rowDiv = container.children[row];
-            rowDiv.classList.add('highlight');
-
-            setTimeout(() => {
-                rowDiv.classList.remove('highlight');
-                const nextRow = row + 1;
-                if (nextRow < c.length) {
-                    highlightAndMoveToNextRow(nextRow);
-                }
-            }, highlightTimes[row] * 1000);
-        }
-
-        // Create the table
-        c.forEach(rowData => {
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-
-            rowData.forEach(cellData => {
-                const cellDiv = document.createElement('div');
-                cellDiv.classList.add('cell');
-                cellDiv.textContent = cellData;
-                rowDiv.appendChild(cellDiv);
-            });
-
-            container.appendChild(rowDiv);
-        });
-
-        // Start highlighting from the first row
-        highlightAndMoveToNextRow(0);
-    </script>
-</body>
-</html> -->
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Horizontal Arrangement</title>
-    <style>
-        .table {
-            display: table;
-            border-collapse: collapse;
-        }
-        .row {
-            display: table-row;
-        }
-        .cell {
-            display: table-cell;
-            border: 1px solid #000;
-            padding: 5px;
-            cursor: pointer; /* Add cursor style for clickable cells */
-        }
-    </style>
-</head>
-<body>
-    <div class="table" id="container"></div>
-    <script>
-        // const c = [['C4 1.0', 'E-4 6.0'], ['C4 0.5', 'E-4 0.5'], ['A-2 0.5', 'A-3 3.0', 'paddle', 'wembley'], ['A-3 0.5']];
-
-        const c = {{chords|safe}};
-        const container = document.getElementById('container');
-    
-        // Create the table
-        c.forEach((rowData, rowIndex) => {
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-    
-            rowData.forEach((cellData, cellIndex) => {
-                const cellDiv = document.createElement('div');
-                cellDiv.classList.add('cell');
-                cellDiv.textContent = cellData;
-    
-                // Add a click event listener to the cell
-                cellDiv.addEventListener('click', () => {
-                    const clickedValue = c[rowIndex][cellIndex];
-                    sendValueToBackend(clickedValue);
-                });
-    
-                rowDiv.appendChild(cellDiv);
-            });
-    
-            container.appendChild(rowDiv);
-        });
-    
-        const csrftoken = getCookie('csrftoken');
-
-        function sendValueToBackend(value) {
-            fetch('/', {
-                method: 'POST',
-                body: JSON.stringify({ value: value }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken  // Include the CSRF token
-                }
-            });
-        }
-
-        // Function to retrieve the CSRF token from cookies
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-    </script>
-
-</body>
-</html> -->
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Horizontal Arrangement</title>
-    <style>
-        .table {
-            display: table;
-            border-collapse: collapse;
-        }
-        .row {
-            display: table-row;
-        }
-        .cell {
-            display: table-cell;
-            border: 1px solid #000;
-            padding: 5px;
-            cursor: pointer; /* Add cursor style for clickable cells */
-        }
-        .highlight {
-            background-color: yellow;
-        }
-    </style>
-</head>
-<body>
-    <div class="table" id="container"></div>
-    <script>
-        const c = {{chords|safe}};
-        const container = document.getElementById('container');
-
-        // Create the table
-        c.forEach((rowData, rowIndex) => {
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-
-            rowData.forEach((cellData, cellIndex) => {
-                const cellDiv = document.createElement('div');
-                cellDiv.classList.add('cell');
-                cellDiv.textContent = cellData;
-
-                // Add a click event listener to the cell
-                cellDiv.addEventListener('click', () => {
-                    const clickedValue = c[rowIndex][cellIndex];
-                    cellDiv.classList.add('highlight'); // Highlight the clicked cell
-                    sendValueToBackend(clickedValue);
-                });
-
-                rowDiv.appendChild(cellDiv);
-            });
-
-            container.appendChild(rowDiv);
-        });
-
-        const csrftoken = getCookie('csrftoken');
-
-        function sendValueToBackend(value) {
-            fetch('/', {
-                method: 'POST',
-                body: JSON.stringify({ value: value }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken // Include the CSRF token
-                }
-            });
-        }
-
-        // Function to retrieve the CSRF token from cookies
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    </script>
-</body>
-</html> -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Horizontal Arrangement</title>
-    <style>
-        .table {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap Grid Example</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Additional styles can be added here */
+    .centered-text {
+      text-align: center;
+    }
+    .table {
             display: table;
             border-collapse: collapse;
         }
@@ -258,117 +31,131 @@
         .highlight-green {
             background-color: green;
         }
-    </style>
+  </style>
 </head>
 <body>
-    <div>
-        <button id="clearButton">Clear Highlights</button>
-        <button id="playSoundButton">Play full score</button>
+
+  <div class="container">
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+      <div>
+        <button id="clearButton" class="btn btn-primary">Clear Highlights</button>
+        <button id="playSoundButton" class="btn btn-primary">Play full score</button>
+      </div>
+      <br>
+      <div class="table" id="container"></div>
     </div>
-    <div class="table" id="container"></div>
-    <script>
-        const c = {{chords|safe}};
-        const container = document.getElementById('container');
-        let selectedCells = [];
+  </div>
 
-        // Create the table
-        c.forEach((rowData, rowIndex) => {
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
+<!-- Bootstrap JS and other scripts if needed -->
+<script>
+    const c = {{chords|safe}};
+    const container = document.getElementById('container');
+    let selectedCells = [];
 
-            rowData.forEach((cellData, cellIndex) => {
-                const cellDiv = document.createElement('div');
-                cellDiv.classList.add('cell');
-                cellDiv.textContent = cellData;
+    // Create the table
+    c.forEach((rowData, rowIndex) => {
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
 
-                // Add a click event listener to the cell
-                cellDiv.addEventListener('click', () => {
-                    const clickedValue = c[rowIndex][cellIndex];
-                    if (selectedCells.length < 2) {
-                        // Highlight the clicked cell with different colors for the first and second selection
-                        const highlightClass = selectedCells.length === 0 ? 'highlight-yellow' : 'highlight-green';
-                        cellDiv.classList.add(highlightClass);
-                        selectedCells.push({ value: clickedValue, color: highlightClass });
-                        if (selectedCells.length === 2) {
-                            sendValuesToBackend(selectedCells);
-                        }
+        rowData.forEach((cellData, cellIndex) => {
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('cell');
+            cellDiv.textContent = cellData;
+
+            // Add a click event listener to the cell
+            cellDiv.addEventListener('click', () => {
+                const clickedValue = c[rowIndex][cellIndex];
+                if (selectedCells.length < 2) {
+                    // Highlight the clicked cell with different colors for the first and second selection
+                    const highlightClass = selectedCells.length === 0 ? 'highlight-yellow' : 'highlight-green';
+                    cellDiv.classList.add(highlightClass);
+                    selectedCells.push({ value: clickedValue, color: highlightClass });
+                    if (selectedCells.length === 2) {
+                        sendValuesToBackend(selectedCells);
                     }
-                });
-
-                rowDiv.appendChild(cellDiv);
-            });
-
-            container.appendChild(rowDiv);
-        });
-
-        const csrftoken = getCookie('csrftoken');
-
-        function sendValuesToBackend(values) {
-            fetch('/', {
-                method: 'POST',
-                body: JSON.stringify({ values: values }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken // Include the CSRF token
                 }
             });
-        }
 
-        // Function to retrieve the CSRF token from cookies
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+            rowDiv.appendChild(cellDiv);
+        });
+
+        container.appendChild(rowDiv);
+    });
+
+    const csrftoken = getCookie('csrftoken');
+
+    function sendValuesToBackend(values) {
+        fetch('/solfa/', {
+            method: 'POST',
+            body: JSON.stringify({ values: values }),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken // Include the CSRF token
+            }
+        });
+    }
+
+    // Function to retrieve the CSRF token from cookies
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
+        return cookieValue;
+    }
 
-        // Select the clear button
-        const clearButton = document.getElementById('clearButton');
+    // Select the clear button
+    const clearButton = document.getElementById('clearButton');
 
-        // Add a click event listener to the clear button
-        clearButton.addEventListener('click', () => {
-            // Reset selectedCells array
-            selectedCells.forEach(cell => {
-                const cellElements = document.querySelectorAll(`.${cell.color}`);
-                cellElements.forEach(element => {
-                    element.classList.remove(cell.color);
-                });
+    // Add a click event listener to the clear button
+    clearButton.addEventListener('click', () => {
+        // Reset selectedCells array
+        selectedCells.forEach(cell => {
+            const cellElements = document.querySelectorAll(`.${cell.color}`);
+            cellElements.forEach(element => {
+                element.classList.remove(cell.color);
             });
-            selectedCells = [];
         });
-        //play sound button
-        document.getElementById("playSoundButton").addEventListener("click", function() {
-    // When the button is clicked, send a request to the Django backend
-    fetch('/trigger-action/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({ action: 'play_sound' })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('Request sent to play sound');
-        } else {
-            console.error('Failed to trigger action');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
+        selectedCells = [];
     });
+    //play sound button
+    document.getElementById("playSoundButton").addEventListener("click", function() {
+// When the button is clicked, send a request to the Django backend
+fetch('/trigger-action/', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ action: 'play_sound' })
+})
+.then(response => {
+    if (response.ok) {
+        console.log('Request sent to play sound');
+    } else {
+        console.error('Failed to trigger action');
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+});
 });
 
 
 
-    </script>
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
+

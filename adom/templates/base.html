@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Numbers Table</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .btn-table {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr); /* 10 columns for the table */
+            gap: 5px;
+        }
+        .btn-table .btn {
+            width: 100%;
+        }
+
+        /* Media queries for different screen sizes */
+        @media (max-width: 576px) {
+            .btn-table .btn {
+                width: 100%;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .btn-table {
+                grid-template-columns: repeat(5, 1fr); /* 5 columns for the table on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="btn-table">
+            <!-- Generating a table of clickable buttons for numbers 1 to 1000 -->
+            
+            {% for i in lists %}
+                <form method="post" action="{% url 'handle_click' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary" name="num" value="{{ i }}">{{ i }}</button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
